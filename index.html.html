@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hard Rock Bet - Influencer Campaign Dashboard</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+            color: #ffffff;
+            padding: 20px;
+        }
+        
+        .header {
+            text-align: center;
+            padding: 30px 0;
+            background: linear-gradient(90deg, #FFD700, #FF6B35);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .header h1 {
+            font-size: 2.5em;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            font-size: 1.2em;
+            color: #FFD700;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .dashboard {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 20px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 20px;
+            border: 1px solid rgba(255, 215, 0, 0.3);
+            backdrop-filter: blur(10px);
+        }
+        
+        .card h3 {
+            color: #FFD700;
+            margin-bottom: 15px;
+            font-size: 1.2em;
+            border-bottom: 2px solid #FF6B35;
+            padding-bottom: 10px;
+        }
+        
+        .metric-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+        
+        .metric {
+            background: rgba(255, 107, 53, 0.1);
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            border: 1px solid rgba(255, 107, 53, 0.3);
+        }
+        
+        .metric-value {
+            font-size: 2em;
+            font-weight: bold;
+            color: #FFD700;
+        }
+        
+        .metric-label {
+            font-size: 0.9em;
+            color: #aaa;
+            margin-top: 5px;
+        }
+        
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+        
+        .table th {
+            background: rgba(255, 215, 0, 0.2);
+            padding: 12px;
+            text-align: left;
+            color: #FFD700;
+            font-weight: bold;
+        }
+        
+        .table td {
+            padding: 10px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .table tr:hover {
+            background: rgba(255, 107, 53, 0.1);
+        }
+        
+        .tier-badge {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 12px;
+            font-size: 0.85em;
+            font-weight: bold;
+        }
+        
+        .tier-1 { background: #FFD700; color: #000; }
+        .tier-2 { background: #FF6B35; color: #fff; }
+        .tier-3 { background: #8B0000; color: #fff; }
+        
+        .platform-badge {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 5px;
+            font-size: 0.85em;
+            margin: 2px;
+        }
+        
+        .platform-tiktok { background: #000; border: 1px solid #FF0050; }
+        .platform-instagram { background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); }
+        .platform-x { background: #000; border: 1px solid #1DA1F2; }
+        
+        .chart-container {
+            position: relative;
+            height: 300px;
+            margin-top: 20px;
+        }
+        
+        .insights {
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.1), rgba(255, 107, 53, 0.1));
+            border-radius: 15px;
+            padding: 20px;
+            margin-top: 30px;
+            border: 2px solid #FFD700;
+        }
+        
+        .insights h3 {
+            color: #FFD700;
+            margin-bottom: 15px;
+        }
+        
+        .insight-item {
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .insight-item:last-child {
+            border-bottom: none;
+        }
+        
+        .highlight {
+            color: #FFD700;
+            font-weight: bold;
+        }
+        
+        .large-card {
+            grid-column: span 2;
+        }
+        
+        @media (max-width: 900px) {
+            .dashboard {
+                grid-template-columns: 1fr;
+            }
+            .large-card {
+                grid-column: span 1;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>HARD ROCK BET</h1>
+    </div>
+    <div class="subtitle">NFL Playoff Influencer Campaign Dashboard</div>
+    
+    <div class="dashboard">
+        <!-- Key Metrics Card -->
+        <div class="card">
+            <h3>Campaign Performance Metrics</h3>
+            <div class="metric-grid">
+                <div class="metric">
+                    <div class="metric-value">147%</div>
+                    <div class="metric-label">Average ROI</div>
+                </div>
+                <div class="metric">
+                    <div class="metric-value">43.3K</div>
+                    <div class="metric-label">Total Signups</div>
+                </div>
+                <div class="metric">
+                    <div class="metric-value">$47</div>
+                    <div class="metric-label">Avg. CPA</div>
+                </div>
+                <div class="metric">
+                    <div class="metric-value">5.8%</div>
+                    <div class="metric-label">Avg. Engagement</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Platform Performance Card -->
+        <div class="card">
+            <h3>Platform Performance</h3>
+            <div class="chart-container">
+                <canvas id="platformChart"></canvas>
+            </div>
+        </div>
+        
+        <!-- Top Performers Table -->
+        <div class="card large-card">
+            <h3>Top Performing Influencers</h3>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Influencer</th>
+                        <th>Platform</th>
+                        <th>Category</th>
+                        <th>ROI</th>
+                        <th>Signups</th>
+                        <th>Tier</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>DJ_Khaled_Wins</td>
+                        <td><span class="platform-badge platform-instagram">Instagram</span></td>
+                        <td>Music x Sports</td>
+                        <td class="highlight">853%</td>
+                        <td>6,122</td>
+                        <td><span class="tier-badge tier-1">Tier 1</span></td>
+                    </tr>
+                    <tr>
+                        <td>Travis_Scott_Picks</td>
+                        <td><span class="platform-badge platform-instagram">Instagram</span></td>
+                        <td>Music x Sports</td>
+                        <td class="highlight">487%</td>
+                        <td>4,806</td>
+                        <td><span class="tier-badge tier-1">Tier 1</span></td>
+                    </tr>
+                    <tr>
+                        <td>PostMalone_Bets</td>
+                        <td><span class="platform-badge platform-tiktok">TikTok</span></td>
+                        <td>Music x Sports</td>
+                        <td class="highlight">207%</td>
+                        <td>6,351</td>
+                        <td><span class="tier-badge tier-1">Tier 1</span></td>
+                    </tr>
+                    <tr>
+                        <td>GameDay_Guru</td>
+                        <td><span class="platform-badge platform-instagram">Instagram</span></td>
+                        <td>ESPN Personalities</td>
+                        <td>178%</td>
+                        <td>458</td>
+                        <td><span class="tier-badge tier-2">Tier 2</span></td>
+                    </tr>
+                    <tr>
+                        <td>BigCat_Picks</td>
+                        <td><span class="platform-badge platform-tiktok">TikTok</span></td>
+                        <td>Barstool Sports</td>
+                        <td>156%</td>
+                        <td>892</td>
+                        <td><span class="tier-badge tier-2">Tier 2</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <!-- Category Performance -->
+        <div class="card">
+            <h3>Category Performance</h3>
+            <div class="chart-container">
+                <canvas id="categoryChart"></canvas>
+            </div>
+        </div>
+        
+        <!-- Content Type Analysis -->
+        <div class="card">
+            <h3>Content Type Effectiveness</h3>
+            <div class="chart-container">
+                <canvas id="contentChart"></canvas>
+            </div>
+        </div>
+        
+        <!-- Vetting Scorecard -->
+        <div class="card">
+            <h3>Influencer Vetting Matrix</h3>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Criteria</th>
+                        <th>Weight</th>
+                        <th>Avg Score</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Audience Quality</td>
+                        <td>25%</td>
+                        <td class="highlight">87/100</td>
+                    </tr>
+                    <tr>
+                        <td>Brand Safety</td>
+                        <td>20%</td>
+                        <td class="highlight">92/100</td>
+                    </tr>
+                    <tr>
+                        <td>Content Quality</td>
+                        <td>20%</td>
+                        <td class="highlight">78/100</td>
+                    </tr>
+                    <tr>
+                        <td>ROI Potential</td>
+                        <td>25%</td>
+                        <td class="highlight">84/100</td>
+                    </tr>
+                    <tr>
+                        <td>Compliance</td>
+                        <td>10%</td>
+                        <td class="highlight">95/100</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    
+    <!-- Strategic Insights Section -->
+    <div class="insights">
+        <h3>🎯 Strategic Recommendations</h3>
+        <div class="insight-item">
+            <strong>1. Music x Sports Opportunity:</strong> 
+            Leverage Hard Rock's unique music heritage. This category shows <span class="highlight">3x higher ROI</span> than traditional sports influencers.
+        </div>
+        <div class="insight-item">
+            <strong>2. Platform Strategy:</strong> 
+            Instagram delivers <span class="highlight">185% average ROI</span> while TikTok excels at <span class="highlight">6.4% engagement rates</span> for younger demographics.
+        </div>
+        <div class="insight-item">
+            <strong>3. Content Optimization:</strong> 
+            Parlay picks generate <span class="highlight">3x more signups</span> than generic promotional content. Live reactions within 1 hour show <span class="highlight">2.5x engagement</span>.
+        </div>
+        <div class="insight-item">
+            <strong>4. Regional Focus:</strong> 
+            Regional micro-influencers (50-200K followers) deliver <span class="highlight">2.3x better CPA</span> despite smaller reach.
+        </div>
+        <div class="insight-item">
+            <strong>5. NFL Playoff Timing:</strong> 
+            Launch campaigns <span class="highlight">48 hours before games</span> and boost spend during Wild Card weekend for maximum impact.
+        </div>
+    </div>
+    
+    <script>
+        // Platform Performance Chart
+        const platformCtx = document.getElementById('platformChart').getContext('2d');
+        new Chart(platformCtx, {
+            type: 'bar',
+            data: {
+                labels: ['Instagram', 'TikTok', 'X (Twitter)'],
+                datasets: [{
+                    label: 'Average ROI %',
+                    data: [185, 43, 58],
+                    backgroundColor: ['#FFD700', '#FF6B35', '#8B0000'],
+                    borderWidth: 2,
+                    borderColor: '#FFD700'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        grid: { color: 'rgba(255, 255, 255, 0.1)' },
+                        ticks: { color: '#fff' }
+                    },
+                    x: {
+                        grid: { display: false },
+                        ticks: { color: '#fff' }
+                    }
+                }
+            }
+        });
+        
+        // Category Performance Chart
+        const categoryCtx = document.getElementById('categoryChart').getContext('2d');
+        new Chart(categoryCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Music x Sports', 'ESPN', 'Barstool', 'Sports Legends', 'Regional', 'Rising Stars'],
+                datasets: [{
+                    data: [23313, 3572, 4212, 10735, 1030, 416],
+                    backgroundColor: [
+                        '#FFD700',
+                        '#FF6B35',
+                        '#FF4500',
+                        '#8B0000',
+                        '#CD5C5C',
+                        '#800020'
+                    ],
+                    borderWidth: 2,
+                    borderColor: '#1a1a1a'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: { color: '#fff', padding: 10, font: { size: 10 } }
+                    }
+                }
+            }
+        });
+        
+        // Content Type Chart
+        const contentCtx = document.getElementById('contentChart').getContext('2d');
+        new Chart(contentCtx, {
+            type: 'radar',
+            data: {
+                labels: ['Parlay Picks', 'Game Preview', 'Live Reaction', 'Promo Code', 'Win Celebration'],
+                datasets: [{
+                    label: 'Engagement Rate',
+                    data: [8.5, 5.2, 7.8, 4.5, 6.3],
+                    backgroundColor: 'rgba(255, 215, 0, 0.2)',
+                    borderColor: '#FFD700',
+                    pointBackgroundColor: '#FFD700',
+                    pointBorderColor: '#fff',
+                    pointHoverBackgroundColor: '#fff',
+                    pointHoverBorderColor: '#FFD700'
+                }, {
+                    label: 'Conversion Rate',
+                    data: [7.2, 4.8, 5.5, 8.9, 3.2],
+                    backgroundColor: 'rgba(255, 107, 53, 0.2)',
+                    borderColor: '#FF6B35',
+                    pointBackgroundColor: '#FF6B35',
+                    pointBorderColor: '#fff',
+                    pointHoverBackgroundColor: '#fff',
+                    pointHoverBorderColor: '#FF6B35'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    r: {
+                        beginAtZero: true,
+                        grid: { color: 'rgba(255, 255, 255, 0.1)' },
+                        ticks: { display: false },
+                        pointLabels: { color: '#fff', font: { size: 10 } }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: { color: '#fff', padding: 10, font: { size: 10 } }
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>
